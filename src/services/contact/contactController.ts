@@ -1,6 +1,12 @@
 import { Request, Response } from "express"
+import q2m from "query-to-mongo"
+import createError from 'http-errors'
+import ContactModel from "./schema"
 
-export let allContacts = (req: Request, res: Response) => {
+export let allContacts = async (req: Request, res: Response) => {
+  const query = q2m(req.query)
+  const total = await ContactModel
+  const contacts = await ContactModel.find()
   res.send("Returns all contacts")
 }
 

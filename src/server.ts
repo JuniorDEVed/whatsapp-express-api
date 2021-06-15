@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import listEndpoints from "express-list-endpoints"
 import cookieParser from "cookie-parser"
 
+import homeRoute from "./services/home/homeRoute"
 import routes from "./services/routes"
 
 import { badRequestHandler } from "./middleware"
@@ -20,6 +21,7 @@ server.use(express.json())
 server.use(cookieParser())
 
 // Routes
+server.use("/", homeRoute)
 server.use("/api", routes)
 
 // Errors

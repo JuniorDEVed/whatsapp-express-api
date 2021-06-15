@@ -1,8 +1,8 @@
 import express from "express"
-import * as chatsController from "./chats/roomController"
+import * as chatsController from "./rooms/roomController"
 import * as contactController from "./contact/contactController"
 import userController from "./user/userController"
-import { authGuard } from "./auth/authGuard"
+// import { authGuard } from "./auth/authGuard"
 const router = express.Router()
 
 // Endpoints

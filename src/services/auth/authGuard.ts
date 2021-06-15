@@ -20,4 +20,4 @@ export const authGuard: MiddlewareFunction = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-})
+}

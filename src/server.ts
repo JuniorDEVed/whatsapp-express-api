@@ -20,7 +20,7 @@ io.on("connection", (socket) => {
   })
 })
 
-export default server
+export { server, app }
 
 // socket.join("main-room")
 // console.log(socket.rooms)

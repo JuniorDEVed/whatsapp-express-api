@@ -3,7 +3,6 @@ import cors from "cors"
 import dotenv from "dotenv"
 import listEndpoints from "express-list-endpoints"
 import cookieParser from "cookie-parser"
-import server from "./server"
 
 import homeRoute from "./services/home/homeRoute"
 import routes from "./routes"
@@ -11,10 +10,11 @@ import routes from "./routes"
 import { badRequestHandler } from "./middleware"
 import { connectMongoDB } from "./database"
 
+import { server, app } from "./server"
+
 // Instantiate
-const app = express()
 process.env.NODE_ENV !== "production" && dotenv.config()
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 5000
 
 // Middleware
 app.use(cors())

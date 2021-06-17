@@ -14,4 +14,4 @@ cloudinary.config({
 
 const cloudinaryStorage = new CloudinaryStorage({ cloudinary })
 
-export const uploadProfilePic = multer({ storage: cloudinaryStorage }).single("profilePic")
+export const uploadProfileImg = multer({ storage: cloudinaryStorage }).single("profileImg")

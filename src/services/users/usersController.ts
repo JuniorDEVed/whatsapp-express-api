@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import q2m from "query-to-mongo"
 import UserModel from "./schema"
-import { User } from "./types"
+import { User, UserDocument } from "./types"
 
 export let registerUser = async (
   req: Request<{}, {}, Pick<User, "userNumber">>,
@@ -67,8 +67,19 @@ export let allUsers = (req: Request, res: Response) => {
   res.send("Returns all rooms")
 }
 
-export let updateUser = (req: Request, res: Response) => {
-  res.send("Returns one room")
+export let updateUser = async (req: Request<{}, {}, User>, res: Response, next: NextFunction) => {
+  try {
+    const user = req.body as UserDocument
+    const updates = Object.keys(req.body) as (keyof User)[]
+
+    updates.forEach((update) => ((user as any)![update] = req.body[update]))
+
+    user!.profileImg = req.file.path
+    await user!.save()
+    res.send(user)
+  } catch (error) {
+    next(error)
+  }
 }
 
 export let deleteUser = (req: Request, res: Response) => {

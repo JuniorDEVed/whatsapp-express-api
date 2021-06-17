@@ -22,7 +22,7 @@ export let addGroup = async (
     // assemble new group object
     const newGroup: Group = {
       creator: user._id,
-      members: members || [], // user and contact numbers
+      members: members || [], // user/contact numbers used as member identifiers
       messages: messages || [],
     }
 
@@ -36,13 +36,38 @@ export let addGroup = async (
   }
 }
 
-export let getGroup = (req: Request, res: Response, next: NextFunction) => {
-  res.send("Returns one room")
+export let allGroups = async (
+  req: Request<Pick<User, "userNumber">, {}, Group>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userNumber } = req.params
+    const user = await UserModel.findOne({ userNumber })
+
+    if (!user) {
+      console.error("User not found")
+      res.send({ error: "User not found" })
+    }
+
+    const groups = await GroupModel.find({ members: { $elemMatch: { $eq: userNumber } } })
+
+    if (!groups) {
+      console.warn("Group not found")
+      res.send({ warn: "Group not found" })
+    }
+
+    res.status(200).send(groups)
+  } catch (error) {
+    next(error)
+  }
 }
 
-export let allGroups = (req: Request, res: Response, next: NextFunction) => {
-  res.send("Returns all rooms")
-}
+export let getGroup = async (
+  req: Request<Pick<User, "userNumber">, {}, Group>,
+  res: Response,
+  next: NextFunction
+) => {}
 
 export let updateGroup = (req: Request, res: Response, next: NextFunction) => {
   res.send("Returns one room")

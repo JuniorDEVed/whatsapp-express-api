@@ -1,17 +1,9 @@
 import mongoose from "mongoose"
+import { ContactSchema } from "../contacts/schema"
 
-import { Contact, User, UserModel } from "./types"
+import { User, UserModel } from "./types"
 
 const { Schema, model } = mongoose
-const ContactSchema = new Schema<Contact>({
-  id: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "User",
-  },
-  nickname: {
-    type: String,
-  },
-})
 
 const UserSchema = new Schema<User, UserModel>({
   phoneNumber: { type: String, required: true, unique: true },

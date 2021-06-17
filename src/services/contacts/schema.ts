@@ -2,13 +2,13 @@ import mongoose from "mongoose"
 
 import { Contact, ContactModel } from "./types"
 
-const { Schema, model } = mongoose
+const { Schema } = mongoose
 
-const ContactSchema = new Schema<Contact, ContactModel>({
+export const ContactSchema = new Schema<Contact, ContactModel>({
   contactsNumber: { type: String, required: true, unique: true },
   name: String,
   profileImg: String,
   about: String,
 })
 
-export default model<Contact, ContactModel>("contact", ContactSchema)
+// export default model<Contact, ContactModel>("contact", ContactSchema)

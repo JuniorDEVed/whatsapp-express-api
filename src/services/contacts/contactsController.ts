@@ -7,9 +7,9 @@ import UserModel from "../users/schema"
 
 export const addContact = async (
   req: Request<
-    Pick<User, "userNumber">,
+    Pick<User, "userNumber">, // this is the req.params
     {},
-    Pick<Contact, "contactsNumber" | "name" | "profileImg" | "about">
+    Pick<Contact, "contactsNumber" | "name" | "profileImg" | "about"> // this is the req.body
   >,
   res: Response,
   next: NextFunction
@@ -33,7 +33,7 @@ export const addContact = async (
     }
 
     // push to users contacts array
-    const result = await UserModel.findOneAndUpdate(
+    const result = await UserModel.findByIdAndUpdate(
       { _id },
       { $push: { contacts: newContact } },
       { new: true }

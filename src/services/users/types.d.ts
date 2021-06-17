@@ -2,7 +2,7 @@ import { Document, Model } from "mongoose"
 
 interface BasicUserInfo {
   _id?: string
-  phoneNumber: string
+  userNumber: string
   profileImg?: string
   name?: string
 }

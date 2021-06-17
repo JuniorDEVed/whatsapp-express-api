@@ -1,27 +1,61 @@
-import { Request, Response } from "express"
+import { Request, Response, NextFunction } from "express"
 import q2m from "query-to-mongo"
 import createError from "http-errors"
-import ContactModel from "./schema"
+import { Contact } from "./types"
+import { User } from "../users/types"
+import UserModel from "../users/schema"
 
-export let addContact = (req: Request, res: Response) => {
-  res.send("Returns one contact")
+export const addContact = async (
+  req: Request<
+    Pick<User, "userNumber">,
+    {},
+    Pick<Contact, "contactsNumber" | "name" | "profileImg" | "about">
+  >,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userNumber } = req.params
+    const { contactsNumber, name, profileImg, about } = req.body
+
+    const { _id } = await UserModel.findOne({ userNumber: userNumber })
+
+    if (!_id) {
+      console.error({ error: "user not found" })
+      return res.send({ error: "user not found" })
+    }
+
+    const newContact: Contact = {
+      contactsNumber,
+      name: name,
+      profileImg,
+      about,
+    }
+
+    // push to users contacts array
+    const result = await UserModel.findOneAndUpdate(
+      { _id },
+      { $push: { contacts: newContact } },
+      { new: true }
+    )
+
+    res.send(result)
+  } catch (error) {}
 }
 
-export let allContacts = async (req: Request, res: Response) => {
+export const allContacts = async (req: Request, res: Response) => {
   const query = q2m(req.query)
-  const total = await ContactModel
-  const contacts = await ContactModel.find()
   res.send("Returns all contacts")
 }
 
-export let getContact = (req: Request, res: Response) => {
+export const getContact = (req: Request, res: Response) => {
   res.send("Returns one contact")
 }
 
-export let updateContact = (req: Request, res: Response) => {
+export const updateContact = (req: Request, res: Response) => {
   res.send("Returns one contact")
 }
 
-export let deleteContact = (req: Request, res: Response) => {
+export const deleteContact = (req: Request, res: Response) => {
   res.send("Returns one contact")
 }

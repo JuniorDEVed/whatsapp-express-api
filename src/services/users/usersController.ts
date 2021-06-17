@@ -4,22 +4,22 @@ import UserModel from "./schema"
 import { User } from "./types"
 
 export let registerUser = async (
-  req: Request<{}, {}, Pick<User, "phoneNumber">>,
+  req: Request<{}, {}, Pick<User, "userNumber">>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { phoneNumber } = req.body
-    console.log(phoneNumber)
+    const { userNumber } = req.body
+    console.log(userNumber)
 
-    const user = await UserModel.find({ phoneNumber: phoneNumber })
+    const user = await UserModel.find({ userNumber: userNumber })
 
     if (user) {
       console.error("user already exists")
       return res.send({ error: "User already exists" })
     }
 
-    const newUser = new UserModel({ phoneNumber })
+    const newUser = new UserModel({ userNumber })
     const result = await newUser.save()
 
     res.send(result)
@@ -29,13 +29,13 @@ export let registerUser = async (
 }
 
 export let loginUser = async (
-  req: Request<{}, {}, Pick<User, "phoneNumber">>,
+  req: Request<{}, {}, Pick<User, "userNumber">>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { phoneNumber } = req.body
-    const user = await UserModel.find({ phoneNumber: phoneNumber })
+    const { userNumber } = req.body
+    const user = await UserModel.find({ userNumber: userNumber })
 
     if (!user) return res.send({ error: "User not found" })
 
@@ -46,15 +46,15 @@ export let loginUser = async (
 }
 
 export let getUser = async (
-  req: Request<{}, {}, Pick<User, "phoneNumber" | "_id">>,
+  req: Request<{}, {}, Pick<User, "userNumber" | "_id">>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { phoneNumber, _id } = req.query
+    const { userNumber, _id } = req.query
 
     //@ts-ignore
-    const user = await UserModel.find({ $or: [{ phoneNumber: phoneNumber }, { _id: _id }] })
+    const user = await UserModel.find({ $or: [{ userNumber: userNumber }, { _id: _id }] })
 
     console.log(user)
     res.status(200).send(user)

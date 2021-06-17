@@ -1,7 +1,7 @@
-import { Document, Model } from "mongoose";
+import { Document, Model } from "mongoose"
 
 export interface Contact {
-  phoneNumber: string
+  contactsNumber: string
   name?: string
   profileImg?: string
   about?: string

@@ -1,7 +1,39 @@
 import { Request, Response, NextFunction } from "express"
+import { ObjectId } from "mongoose"
+import { User } from "../users/types"
+import UserModel from "../users/schema"
+import GroupModel from "./schema"
+import { Group } from "./types"
+import { Contact } from "../contacts/types"
 
-export let addGroup = (req: Request, res: Response, next: NextFunction) => {
-  res.send("Returns one room")
+export let addGroup = async (
+  req: Request<Pick<User, "userNumber">, {}, Group>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { members } = req.body
+    const user = await UserModel.findOne({ userNumber: req.params.userNumber })
+
+    if (!user) {
+      console.error("User not found")
+      res.send({ error: "User not found" })
+    }
+
+    // assemble new group object
+    const newGroup: Group = {
+      creator: user._id,
+      members: members || [],
+    }
+
+    // create group
+    const group = new GroupModel(newGroup)
+    const result = await group.save()
+
+    res.status(201).send(newGroup)
+  } catch (error) {
+    next(error)
+  }
 }
 
 export let getGroup = (req: Request, res: Response, next: NextFunction) => {

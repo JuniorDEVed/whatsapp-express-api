@@ -1,12 +1,12 @@
-import { Document, Model } from "mongoose"
+import { Document, Model, ObjectId } from "mongoose"
 import { User } from "../users/types"
 import { Message } from "../../typings"
 
 export interface Group {
-  owner: User
-  admins: User[]
-  members: User[]
-  messages: Message[]
+  creator: string
+  admins?: User[]
+  members?: User[]
+  messages?: Message[]
 }
 
 export interface GroupDocument extends Group, Document<string> {}

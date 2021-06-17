@@ -7,7 +7,7 @@ const { Schema } = mongoose
 export const ContactSchema = new Schema<Contact, ContactModel>({
   contactsNumber: { type: String, required: true, unique: true },
   name: String,
-  profileImg: String,
+  profileImg: { type: String, default: "" },
   about: String,
 })
 

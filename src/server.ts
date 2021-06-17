@@ -1,12 +1,14 @@
 import express from "express"
 import { createServer } from "http"
-import { Server } from "socket.io"
+import { Server, Socket } from "socket.io"
 
 const app = express()
 const server = createServer(app)
 const io = new Server(server, { allowEIO3: true })
 
 import { Message, OpenChatRequest, User } from "./typings"
+
+const activeSockets = {}
 
 io.on("connection", (socket) => {
   console.log(socket.id)

@@ -4,7 +4,6 @@ import { User } from "../users/types"
 import UserModel from "../users/schema"
 import GroupModel from "./schema"
 import { Group } from "./types"
-import { Contact } from "../contacts/types"
 
 export let addGroup = async (
   req: Request<Pick<User, "userNumber">, {}, Group>,
@@ -12,7 +11,7 @@ export let addGroup = async (
   next: NextFunction
 ) => {
   try {
-    const { members } = req.body
+    const { members, messages } = req.body
     const user = await UserModel.findOne({ userNumber: req.params.userNumber })
 
     if (!user) {
@@ -24,13 +23,14 @@ export let addGroup = async (
     const newGroup: Group = {
       creator: user._id,
       members: members || [],
+      messages: messages || [],
     }
 
     // create group
     const group = new GroupModel(newGroup)
     const result = await group.save()
 
-    res.status(201).send(newGroup)
+    res.status(201).send(result)
   } catch (error) {
     next(error)
   }

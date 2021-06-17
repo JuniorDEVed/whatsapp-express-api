@@ -22,7 +22,7 @@ export let addGroup = async (
     // assemble new group object
     const newGroup: Group = {
       creator: user._id,
-      members: members || [],
+      members: members || [], // user and contact numbers
       messages: messages || [],
     }
 

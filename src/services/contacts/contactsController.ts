@@ -43,9 +43,19 @@ export const addContact = async (
   } catch (error) {}
 }
 
-export const allContacts = async (req: Request, res: Response) => {
-  const query = q2m(req.query)
-  res.send("Returns all contacts")
+export const allContacts = async (
+  req: Request<Pick<User, "userNumber">, {}, {}>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userNumber } = req.params
+    const { contacts } = await UserModel.findOne({ userNumber: userNumber })
+
+    res.send(contacts)
+  } catch (error) {
+    next(error)
+  }
 }
 
 export const getContact = (req: Request, res: Response) => {

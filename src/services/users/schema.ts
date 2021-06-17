@@ -14,7 +14,7 @@ const ContactSchema = new Schema<Contact>({
 })
 
 const UserSchema = new Schema<User, UserModel>({
-  phoneNumber: { type: String, required: true, unique: true },
+  userNumber: { type: String, required: true, unique: true },
   password: { type: String, required: false, minlength: 8 },
   name: String,
   profileImg: String,

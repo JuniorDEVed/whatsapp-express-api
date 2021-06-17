@@ -13,16 +13,18 @@ export let registerUser = async (
     console.log(userNumber)
 
     const user = await UserModel.find({ userNumber: userNumber })
+    console.log(user)
 
-    if (user) {
+    if (user.length > 0) {
       console.error("user already exists")
       return res.send({ error: "User already exists" })
+    } else {
+      const newUser = new UserModel({ userNumber })
+      const result = await newUser.save()
+  
+      res.send(result)
     }
 
-    const newUser = new UserModel({ userNumber })
-    const result = await newUser.save()
-
-    res.send(result)
   } catch (error) {
     next(error)
   }

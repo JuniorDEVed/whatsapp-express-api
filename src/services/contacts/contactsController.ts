@@ -12,7 +12,7 @@ export const addContact = async (
 ) => {
   try {
     const { userNumber } = req.params
-    const { contactsNumber, name, profileImg, about } = req.body
+    const { contactsNumber, contactsName, profileImg, about } = req.body
 
     const { _id } = await UserModel.findOne({ userNumber: userNumber })
 
@@ -23,7 +23,7 @@ export const addContact = async (
 
     const newContact: Contact = {
       contactsNumber,
-      name: name || "",
+      contactsName: contactsName || "",
       profileImg,
       about,
     }

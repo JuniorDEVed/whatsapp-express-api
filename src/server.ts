@@ -20,7 +20,7 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", async (message, groupId) => {
     // await GroupModel.findByIdAndUpdate
     console.log(message)
-    //socket.to(groupId).emit(message)
+    socket.to(groupId).emit(message)
   })
 
   // when connected add userNumber: socketId to active socket list

@@ -14,6 +14,8 @@ export const addContact = async (
     const { userNumber } = req.params
     const { contactsNumber, contactsName, profileImg, about } = req.body
 
+    console.log("Contact route", contactsNumber, contactsName)
+
     const { _id } = await UserModel.findOne({ userNumber: userNumber })
 
     if (!_id) {
@@ -23,7 +25,7 @@ export const addContact = async (
 
     const newContact: Contact = {
       contactsNumber,
-      contactsName: contactsName || "",
+      contactsName,
       profileImg,
       about,
     }

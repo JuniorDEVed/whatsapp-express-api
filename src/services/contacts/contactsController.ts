@@ -6,11 +6,7 @@ import { User } from "../users/types"
 import UserModel from "../users/schema"
 
 export const addContact = async (
-  req: Request<
-    Pick<User, "userNumber">, // this is the req.params
-    {},
-    Contact
-  >,
+  req: Request<Pick<User, "userNumber">, {}, Contact>,
   res: Response,
   next: NextFunction
 ) => {
@@ -28,31 +24,16 @@ export const addContact = async (
     // check if contact is currently a registered user
     const contact = await UserModel.findOne({ contactsNumber: contactsNumber })
 
-    // if not create private contact in contacts array
-    if (!contact) {
-      console.warn({ warning: "contact not found" })
-
-      const newContact: Contact = {
-        contactsNumber,
-        name: name || "",
-        profileImg,
-        about: about || "",
-      }
-      // push to users contacts array
-      const result = await UserModel.findByIdAndUpdate(
-        { _id },
-        { $push: { contacts: newContact } },
-        { new: true }
-      )
-
-      res.send(result)
+    const newContact: Contact = {
+      contactsNumber,
+      name: name || "",
+      profileImg,
+      about,
     }
-
-    // if contact already exists then push the returned user as the contact
-    console.warn({ warning: "contact already exists, will populate with current data" })
+    // push to users contacts array
     const result = await UserModel.findByIdAndUpdate(
       { _id },
-      { $push: { contacts: contact } },
+      { $push: { contacts: newContact } },
       { new: true }
     )
 
@@ -68,7 +49,6 @@ export const allContacts = async (
   try {
     const { userNumber } = req.params
     const { contacts } = await UserModel.findOne({ userNumber: userNumber })
-
     res.send(contacts)
   } catch (error) {
     next(error)

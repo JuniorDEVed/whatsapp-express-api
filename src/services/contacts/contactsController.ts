@@ -9,7 +9,7 @@ export const addContact = async (
   req: Request<
     Pick<User, "userNumber">, // this is the req.params
     {},
-    Pick<Contact, "contactsNumber" | "name" | "profileImg" | "about"> // this is the req.body
+    Contact
   >,
   res: Response,
   next: NextFunction
@@ -25,17 +25,34 @@ export const addContact = async (
       return res.send({ error: "user not found" })
     }
 
-    const newContact: Contact = {
-      contactsNumber,
-      name: name,
-      profileImg,
-      about,
+    // check if contact is currently a registered user
+    const contact = await UserModel.findOne({ contactsNumber: contactsNumber })
+
+    // if not create private contact in contacts array
+    if (!contact) {
+      console.warn({ warning: "contact not found" })
+
+      const newContact: Contact = {
+        contactsNumber,
+        name: name || "",
+        profileImg,
+        about: about || "",
+      }
+      // push to users contacts array
+      const result = await UserModel.findByIdAndUpdate(
+        { _id },
+        { $push: { contacts: newContact } },
+        { new: true }
+      )
+
+      res.send(result)
     }
 
-    // push to users contacts array
+    // if contact already exists then push the returned user as the contact
+    console.warn({ warning: "contact already exists, will populate with current data" })
     const result = await UserModel.findByIdAndUpdate(
       { _id },
-      { $push: { contacts: newContact } },
+      { $push: { contacts: contact } },
       { new: true }
     )
 

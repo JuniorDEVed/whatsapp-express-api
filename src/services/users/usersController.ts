@@ -12,7 +12,7 @@ export let registerUser = async (
     const { userNumber } = req.body
     console.log(userNumber)
 
-    const user = await UserModel.find({ userNumber: userNumber })
+    const user = await UserModel.findOne({ userNumber: userNumber })
 
     if (user) {
       console.error("user already exists")

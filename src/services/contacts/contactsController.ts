@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from "express"
-import q2m from "query-to-mongo"
-import createError from "http-errors"
 import { Contact } from "./types"
 import { User } from "../users/types"
 import UserModel from "../users/schema"
@@ -13,8 +11,6 @@ export const addContact = async (
   try {
     const { userNumber } = req.params
     const { contactsNumber, contactsName, profileImg, about } = req.body
-
-    console.log("Contact route", contactsNumber, contactsName)
 
     const { _id } = await UserModel.findOne({ userNumber: userNumber })
 

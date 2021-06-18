@@ -30,6 +30,11 @@ export let addGroup = async (
     const group = new GroupModel(newGroup)
     const result = await group.save()
 
+    members.forEach((member) => {
+      //@ts-ignore
+      global.activeSockets[member].join(group._id)
+    })
+
     res.status(201).send(result)
   } catch (error) {
     next(error)
@@ -50,7 +55,9 @@ export let allGroups = async (
       res.send({ error: "User not found" })
     }
 
-    const groups = await GroupModel.find({ members: { $elemMatch: { $eq: userNumber } } })
+    const groups = await GroupModel.find({ members: { $elemMatch: { $eq: userNumber } } }).select(
+      "-messages"
+    )
 
     if (!groups) {
       console.warn("Group not found")

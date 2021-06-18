@@ -4,7 +4,7 @@ import { Message } from "../../typings"
 
 export interface Group {
   creator: string
-  members?: User[]
+  members?: string[]
   messages?: Message[]
 }
 

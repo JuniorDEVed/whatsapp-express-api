@@ -63,8 +63,12 @@ export let getUser = async (
   }
 }
 
-export let allUsers = (req: Request, res: Response) => {
-  res.send("Returns all rooms")
+export let allUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await UserModel.find({})
+
+    res.send(users)
+  } catch (error) {}
 }
 
 export let updateUser = async (req: Request<{}, {}, User>, res: Response, next: NextFunction) => {

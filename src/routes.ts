@@ -12,6 +12,7 @@ router.post("/user/login", usersController.loginUser) // 									🟢
 router.post("/user/register", usersController.registerUser) // 						🟢
 router.get("/user", usersController.getUser) // searchBy id? phoneNumber? 🟢
 router.put("/user", uploadProfileImg, usersController.updateUser) //     	🟠 needs testing @Andi to finish 🙄😃
+router.get("/users", usersController.allUsers)
 
 // contacts @ Luca
 router.post("/contact/:userNumber", contactsController.addContact) // 		🟢

@@ -21,9 +21,6 @@ export const addContact = async (
       return res.send({ error: "user not found" })
     }
 
-    // check if contact is currently a registered user
-    const contact = await UserModel.findOne({ contactsNumber: contactsNumber })
-
     const newContact: Contact = {
       contactsNumber,
       name: name || "",
@@ -42,14 +39,20 @@ export const addContact = async (
 }
 
 export const allContacts = async (
-  req: Request<Pick<User, "userNumber">, {}, {}>,
+  req: Request<Pick<User, "userNumber">, {}, Contact>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { userNumber } = req.params
-    const { contacts } = await UserModel.findOne({ userNumber: userNumber })
-    res.send(contacts)
+    console.log(userNumber)
+    console.log("hello world")
+    const users = await UserModel.find({ userNumber })
+
+    //users.forEach((u) => console.log(u.userNumber === userNumber))
+
+    //console.log(users)
+    res.send(users)
   } catch (error) {
     next(error)
   }

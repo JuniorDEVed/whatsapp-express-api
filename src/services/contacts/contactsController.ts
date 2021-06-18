@@ -45,14 +45,12 @@ export const allContacts = async (
 ) => {
   try {
     const { userNumber } = req.params
-    console.log(userNumber)
-    console.log("hello world")
-    const users = await UserModel.find({ userNumber })
 
-    //users.forEach((u) => console.log(u.userNumber === userNumber))
+    const user = await UserModel.find({ userNumber })
 
-    //console.log(users)
-    res.send(users)
+    const contacts = user[0].contacts
+
+    res.send(contacts)
   } catch (error) {
     next(error)
   }

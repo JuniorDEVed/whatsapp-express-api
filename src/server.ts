@@ -8,13 +8,25 @@ const io = new Server(server, { allowEIO3: true })
 
 import { Message, OpenChatRequest, User } from "./typings"
 
-const activeSockets = {}
+const activeSockets = {
+  // "07367329294": socketId
+}
 
 io.on("connection", (socket) => {
   console.log(socket.id)
 
-  socket.on("sendmessage", (id, message) => {
-    console.log(id, message)
+  socket.on("sendMessage", (groupId, message) => {
+    socket.to(groupId).emit(message)
+  })
+
+  // when connected add userNumber: socketId to active socket list
+  socket.on("didConnect", (userNumber) => {
+    activeSockets[userNumber] = socket
+  })
+
+  // join group
+  socket.on("joinGroup", (userNumber, groupId) => {
+    activeSockets[userNumber].join(groupId)
   })
 
   socket.on("disconnect", () => {

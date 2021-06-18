@@ -18,7 +18,6 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", (groupId, message) => {
     // await RoomModel.findByIdAndUpdate
-
     socket.to(groupId).emit(message)
   })
 
